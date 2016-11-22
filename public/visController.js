@@ -18,6 +18,7 @@ define(function (require) {
     const queryFilter = Private(require('ui/filter_bar/query_filter'));
     const pushFilter = Private(require('ui/filter_bar/push_filter'))(getAppState());
     const callbacks = Private(require('plugins/enhanced_tilemap/callbacks'));
+    const POIsProvider = Private(require('plugins/enhanced_tilemap/POIs'));
     const utils = require('plugins/enhanced_tilemap/utils');
     let TileMapMap = Private(MapProvider);
     const geoJsonConverter = Private(AggResponseGeoJsonGeoJsonProvider);
@@ -27,6 +28,11 @@ define(function (require) {
     let collar = null;
     appendMap();
     modifyToDsl();
+
+    const impoundPOIs = new POIsProvider('impound', 'location', 'INCIDENT_ADDRESS');
+    impoundPOIs.getPOIs(points => {
+      console.log("points: ", points);
+    });
 
     const shapeFields = $scope.vis.indexPattern.fields.filter(function (field) {
       return field.type === 'geo_shape';
@@ -116,6 +122,7 @@ define(function (require) {
           courier.fetch();
           return;
         }
+
         const chartData = buildChartData(resp);
         if(!chartData) return;
         const geoMinMax = getGeoExtents(chartData);
