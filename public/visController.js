@@ -31,7 +31,7 @@ define(function (require) {
 
     const impoundPOIs = new POIsProvider('impound', 'location', 'INCIDENT_ADDRESS');
     impoundPOIs.getPOIs(points => {
-      console.log("points: ", points);
+      map.addFeatureGroup(points, 'impound');
     });
 
     const shapeFields = $scope.vis.indexPattern.fields.filter(function (field) {

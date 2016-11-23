@@ -20,7 +20,10 @@ define(function (require) {
     POIs.prototype.getPOIs = function (callback) {
       savedSearches.get(this.savedSearchId).then(savedSearch => {
         const searchSource = new SearchSource();
+        //Do not filter POIs by time so can not inherit from rootSearchSource
+        searchSource.inherits(false);
         searchSource.query(savedSearch.searchSource.get('query'));
+        searchSource.filter(savedSearch.searchSource.get('filter'));
         searchSource.index(savedSearch.searchSource._state.index);
         searchSource.size(100);
         searchSource.source(_.compact([ this.geoPointField, this.labelField ]));

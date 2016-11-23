@@ -207,6 +207,22 @@ define(function (require) {
       this.map = undefined;
     };
 
+    TileMapMap.prototype.addFeatureGroup = function (points, name, color) {
+      const featureGroup = new L.FeatureGroup();
+      points.forEach(function(point) {
+        featureGroup.addLayer(
+          L.marker(
+            point.latlng, 
+            {
+              icon: markerIcon,
+              title: point.label
+            })
+          );
+      });
+      this.map.addLayer(featureGroup);
+      this._layerControl.addOverlay(featureGroup, name);
+    };
+
     /**
      * Switch type of data overlay for map:
      * creates featurelayer from mapData (geoJson)
