@@ -111,7 +111,7 @@ define(function (require) {
       visParams.overlays.savedSearches.forEach(function (layerParams) {
         const poi = new POIsProvider(layerParams);
         poi.getPOIs(points => {
-          map.addPOILayer(layerParams.savedSearchId, points);
+          map.addPOILayer(layerParams.savedSearchId, points, layerParams.color);
         });
       });
     });

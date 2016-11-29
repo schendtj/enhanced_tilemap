@@ -14,7 +14,7 @@ define(function (require) {
       template: require('./savedSearches.html'),
       link: function (scope, element, attrs) {
         scope.addLayer = function() {
-          scope.layers.push({});
+          scope.layers.push({color: 'green'});
         }
         scope.removeLayer = function(layerIndex) {
           scope.layers.splice(layerIndex, 1);
