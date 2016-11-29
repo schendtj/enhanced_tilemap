@@ -18,21 +18,20 @@ define(function (require) {
         
         scope.updateIndex = function() {
           scope.warn = "";
-          scope.layer.geoPointField = null;
           scope.layer.savedSearchId = scope.savedSearch.value;
+          scope.layer.geoPointField = null;
+          scope.layer.labelField = null;
 
-          indexPatterns.get(scope.savedSearch.indexId).then(function (index) {
-            scope.geoPointFields = index.fields.filter(function (field) {
-              return field.type === 'geo_point';
-            }).map(function (field) {
-              return field.name;
-            });
+          refreshIndexFields(scope.savedSearch.indexId, function(geoPointFields, labelFields) {
+            scope.geoPointFields = geoPointFields;
+            scope.labelFields = labelFields;
+
             if (scope.geoPointFields.length === 0) {
-              scope.warn = "Unable to use selected saved search for points of interest, index does not contain any geo_point fields."
+              scope.warn = "Unable to use selected saved search, index does not contain any geo_point fields."
             } else if (scope.geoPointFields.length === 1) {
               scope.layer.geoPointField = scope.geoPointFields[0];
             }
-          });
+          })
         }
 
         function fetchSavedSearches() {
@@ -46,10 +45,47 @@ define(function (require) {
                 value: hit.id
               };
             });
+
+            const selected = _.filter(scope.items, function(item) {
+              if (item.value === scope.layer.savedSearchId) {
+                return true;
+              }
+            });
+            if (selected.length > 0) {
+              scope.savedSearch = selected[0];
+              refreshIndexFields(selected[0].indexId, function(geoPointFields, labelFields) {
+                scope.geoPointFields = geoPointFields;
+                scope.labelFields = labelFields;
+              });
+            }
           });
         }
       }
     };
+
+    function refreshIndexFields(indexId, callback) {
+      indexPatterns.get(indexId).then(function (index) {
+        const geoPointFields = index.fields.filter(function (field) {
+          return field.type === 'geo_point';
+        }).map(function (field) {
+          return field.name;
+        });
+        
+        const labelFields = index.fields.filter(function (field) {
+          let keep = true;
+          if (field.type === 'boolean' || field.type === 'geo_point' || field.type === 'geo_shape') {
+            keep = false;
+          } else if (!field.name || field.name.substring(0,1) === '_') {
+            keep = false;
+          }
+          return keep;
+        }).map(function (field) {
+          return field.name;
+        });
+
+        callback(geoPointFields, labelFields);
+      });
+    }
 
     function getIndexId(hit) {
       const state = JSON.parse(hit.kibanaSavedObjectMeta.searchSourceJSON);

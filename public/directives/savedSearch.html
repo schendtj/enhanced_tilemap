@@ -6,7 +6,7 @@
     <p>
       {{warn}}
     </p>
-    <select class="form-control"
+    <select required class="form-control"
       ng-change="updateIndex()"
       ng-model="savedSearch"
       ng-options="item.label for item in items">
@@ -16,9 +16,27 @@
     <label>
       Geo Point Field
     </label>
-    <select class="form-control"
+    <select required class="form-control"
       ng-model="layer.geoPointField"
       ng-options="item for item in geoPointFields">
     </select>
+  </div>
+  <div class="form-group">
+    <label>
+      Label Field
+    </label>
+    <select class="form-control"
+      ng-model="layer.labelField"
+      ng-options="item for item in labelFields">
+    </select>
+  </div>
+  <div class="form-group">
+    <label>
+      Limit
+    </label>
+    <input class="form-control"
+      type="number" min="1" max="10000"
+      placeholder="100" 
+      ng-model="layer.limit" />
   </div>
 </div>

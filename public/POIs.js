@@ -11,10 +11,11 @@ define(function (require) {
      *
      * Turns saved search results into easily consumible data for leaflet.
      */
-    function POIs(savedSearchId, geoPointField, labelField) {
-      this.savedSearchId = savedSearchId;
-      this.geoPointField = geoPointField;
-      this.labelField = labelField;
+    function POIs(params) {
+      this.savedSearchId = params.savedSearchId;
+      this.geoPointField = params.geoPointField;
+      this.labelField = _.get(params, 'labelField', null);
+      this.limit = _.get(params, 'limit', 100);
     }
 
     POIs.prototype.getPOIs = function (callback) {
@@ -25,11 +26,10 @@ define(function (require) {
         searchSource.query(savedSearch.searchSource.get('query'));
         searchSource.filter(savedSearch.searchSource.get('filter'));
         searchSource.index(savedSearch.searchSource._state.index);
-        searchSource.size(100);
+        searchSource.size(this.limit);
         searchSource.source(_.compact([ this.geoPointField, this.labelField ]));
         searchSource.fetch()
         .then(searchResp => {
-          console.log("search results: ", searchResp);
           callback(_.map(searchResp.hits.hits, hit => {
             return {
               label: hit._source[this.labelField],

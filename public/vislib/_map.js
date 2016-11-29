@@ -46,6 +46,7 @@ define(function (require) {
      */
     function TileMapMap(container, params) {
       this._container = container;
+      this._poiLayers = [];
 
       // keep a reference to all of the optional params
       this._callbacks = _.get(params, 'callbacks');
@@ -207,7 +208,16 @@ define(function (require) {
       this.map = undefined;
     };
 
-    TileMapMap.prototype.addFeatureGroup = function (points, name, color) {
+    TileMapMap.prototype.clearPOILayers = function () {
+      const self = this;
+      this._poiLayers.forEach(function(layer) {
+        self._layerControl.removeLayer(layer);
+        self.map.removeLayer(layer);
+      });
+      this._poiLayers = [];
+    };
+
+    TileMapMap.prototype.addPOILayer = function (layerName, points, color) {
       const featureGroup = new L.FeatureGroup();
       points.forEach(function(point) {
         featureGroup.addLayer(
@@ -220,7 +230,8 @@ define(function (require) {
           );
       });
       this.map.addLayer(featureGroup);
-      this._layerControl.addOverlay(featureGroup, name);
+      this._layerControl.addOverlay(featureGroup, layerName);
+      this._poiLayers.push(featureGroup);
     };
 
     /**

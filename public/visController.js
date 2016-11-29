@@ -29,11 +29,6 @@ define(function (require) {
     appendMap();
     modifyToDsl();
 
-    const impoundPOIs = new POIsProvider('impound', 'location', 'INCIDENT_ADDRESS');
-    impoundPOIs.getPOIs(points => {
-      map.addFeatureGroup(points, 'impound');
-    });
-
     const shapeFields = $scope.vis.indexPattern.fields.filter(function (field) {
       return field.type === 'geo_shape';
     }).map(function (field) {
@@ -110,6 +105,16 @@ define(function (require) {
         max: visData.geoJson.properties.max
       }
     }
+
+    $scope.$watch('vis.params', function (visParams) {
+      map.clearPOILayers();
+      visParams.overlays.savedSearches.forEach(function (layerParams) {
+        const poi = new POIsProvider(layerParams);
+        poi.getPOIs(points => {
+          map.addPOILayer(layerParams.savedSearchId, points);
+        });
+      });
+    });
 
     $scope.$watch('esResponse', function (resp) {
       if(resp) {

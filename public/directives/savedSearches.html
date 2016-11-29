@@ -5,6 +5,7 @@
   </label>
   <ul class="etm-options-list">
     <li ng-repeat="layer in layers" class="etm-option-item">
+      <label>POI Layer {{$index + 1}}</label>
       <saved-search layer="layer"></saved-search>
       <div class="btn-group rightCorner">
         <button class="btn btn-xs btn-danger" ng-click="removeLayer($index)" > 
