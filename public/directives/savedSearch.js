@@ -10,6 +10,7 @@ define(function (require) {
       restrict: 'E',
       replace: true,
       scope: {
+        layer: '='
       },
       template: require('./savedSearch.html'),
       link: function (scope, element, attrs) {
@@ -17,7 +18,8 @@ define(function (require) {
         
         scope.updateIndex = function() {
           scope.warn = "";
-          scope.geoPointField = null;
+          scope.layer.geoPointField = null;
+          scope.layer.savedSearchId = scope.savedSearch.value;
 
           indexPatterns.get(scope.savedSearch.indexId).then(function (index) {
             scope.geoPointFields = index.fields.filter(function (field) {
@@ -28,7 +30,7 @@ define(function (require) {
             if (scope.geoPointFields.length === 0) {
               scope.warn = "Unable to use selected saved search for points of interest, index does not contain any geo_point fields."
             } else if (scope.geoPointFields.length === 1) {
-              scope.geoPointField = scope.geoPointFields[0];
+              scope.layer.geoPointField = scope.geoPointFields[0];
             }
           });
         }
