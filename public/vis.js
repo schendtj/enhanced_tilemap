@@ -5,7 +5,8 @@ import FilterBarPushFilterProvider from 'ui/filter_bar/push_filter';
 define(function (require) {
   require('ui/registry/vis_types').register(EnhancedTileMapVisProvider);
   require('plugins/enhanced_tilemap/vis.less');
-  require('plugins/enhanced_tilemap/directives/bands.js');
+  require('plugins/enhanced_tilemap/directives/bands');
+  require('plugins/enhanced_tilemap/directives/savedSearches');
   require('plugins/enhanced_tilemap/visController');
 
   function EnhancedTileMapVisProvider(Private, getAppState, courier, config) {

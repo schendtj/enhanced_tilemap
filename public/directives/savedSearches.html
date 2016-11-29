@@ -1,0 +1,11 @@
+<div>
+<select
+  ng-change="updateIndex()"
+  ng-model="selected"
+  ng-options="item.label for item in items">
+</select>
+<select
+  ng-model="geoPointField"
+  ng-options="item.label for item in geoPointFields">
+</select>
+</div>
