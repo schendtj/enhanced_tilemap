@@ -1,0 +1,24 @@
+<div class="well">
+  <div class="form-group">
+    <label>
+      Saved Search
+    </label>
+    <p>
+      {{warn}}
+    </p>
+    <select class="form-control"
+      ng-change="updateIndex()"
+      ng-model="savedSearch"
+      ng-options="item.label for item in items">
+    </select>
+  </div>
+  <div class="form-group">
+    <label>
+      Geo Point Field
+    </label>
+    <select class="form-control"
+      ng-model="geoPointField"
+      ng-options="item for item in geoPointFields">
+    </select>
+  </div>
+</div>
