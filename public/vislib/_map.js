@@ -234,9 +234,15 @@ define(function (require) {
     };
 
     TileMapMap.prototype.destroy = function () {
+<<<<<<< HEAD
       if (this._label) this._label.removeFrom(this.map);
       if (this._fitControl) this._fitControl.removeFrom(this.map);
       if (this._drawControl) this._drawControl.removeFrom(this.map);
+=======
+      if (this._label) this._label.remove(this.map);
+      if (this._fitControl) this._fitControl.remove(this.map);
+      if (this._boundingControl) this._boundingControl.remove(this.map);
+>>>>>>> Updated _map to change 'removeFrom()' to 'remove()' as per Leaflet 1.x documentation
       if (this._markers) this._markers.destroy();
       syncMaps.remove(this.map);
       this.map.remove();
